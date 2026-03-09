@@ -131,3 +131,51 @@ resource "aws_internet_gateway" "vpc3" {
     CreatedVia = var.created_via
   }
 }
+
+resource "aws_route_table" "vpc1_public" {
+  vpc_id = aws_vpc.vpc1.id
+
+  tags = {
+    Name       = "vpc1_public"
+    Project    = "My Internet on AWS"
+    CreatedVia = var.created_via
+  }
+}
+
+resource "aws_route_table" "vpc2_public" {
+  vpc_id = aws_vpc.vpc2.id
+
+  tags = {
+    Name       = "vpc2_public"
+    Project    = "My Internet on AWS"
+    CreatedVia = var.created_via
+  }
+}
+
+resource "aws_route_table" "vpc3_public" {
+  vpc_id = aws_vpc.vpc3.id
+
+  tags = {
+    Name       = "vpc3_public"
+    Project    = "My Internet on AWS"
+    CreatedVia = var.created_via
+  }
+}
+
+resource "aws_route" "vpc1_public" {
+  route_table_id         = aws_route_table.vpc1_public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.vpc1.id
+}
+
+resource "aws_route" "vpc2_public" {
+  route_table_id         = aws_route_table.vpc2_public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.vpc2.id
+}
+
+resource "aws_route" "vpc3_public" {
+  route_table_id         = aws_route_table.vpc3_public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.vpc3.id
+}
