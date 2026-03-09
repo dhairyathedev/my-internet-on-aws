@@ -9,7 +9,7 @@ resource "aws_ec2_transit_gateway" "ixp" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc1" {
-  subnet_ids         = [for subnet in aws_subnet.vpc1 : subnet.id]
+  subnet_ids         = [aws_subnet.vpc1_private.id]
   vpc_id             = aws_vpc.vpc1.id
   transit_gateway_id = aws_ec2_transit_gateway.ixp.id
 
@@ -21,7 +21,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc1" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc2" {
-  subnet_ids         = [for subnet in aws_subnet.vpc2 : subnet.id]
+  subnet_ids         = [aws_subnet.vpc2_private.id]
   vpc_id             = aws_vpc.vpc2.id
   transit_gateway_id = aws_ec2_transit_gateway.ixp.id
 
@@ -33,7 +33,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc2" {
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc3" {
-  subnet_ids         = [for subnet in aws_subnet.vpc3 : subnet.id]
+  subnet_ids         = [aws_subnet.vpc3_private.id]
   vpc_id             = aws_vpc.vpc3.id
   transit_gateway_id = aws_ec2_transit_gateway.ixp.id
 
@@ -56,18 +56,17 @@ resource "aws_ec2_transit_gateway_route_table" "tgw_route_table" {
   }
 }
 
-resource "aws_ec2_transit_gateway_route" "tgw_route" {
-  destination_cidr_block         = "10.1.0.0/16"
+resource "aws_ec2_transit_gateway_route_table_propagation" "vpc1" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc1.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
 }
 
-resource "aws_ec2_transit_gateway_route" "tgw_route2" {
-  destination_cidr_block         = "10.2.0.0/16"
+resource "aws_ec2_transit_gateway_route_table_propagation" "vpc2" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc2.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
 }
 
-resource "aws_ec2_transit_gateway_route" "tgw_route3" {
-  destination_cidr_block         = "10.3.0.0/16"
+resource "aws_ec2_transit_gateway_route_table_propagation" "vpc3" {
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc3.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
 }
-
